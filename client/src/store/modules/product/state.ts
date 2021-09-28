@@ -1,11 +1,17 @@
 //#region State
-import {IProduct} from "@/types";
+import { IProduct } from '@/types';
 
 export type ProductState = {
-  products: IProduct[];
+  products : {
+    all: IProduct[];
+    filtered: IProduct[];
+  }
 };
 
 export const state: ProductState = {
-  products: []
+  products : {
+    all: [],
+    filtered: [],
+  }
 };
 //#endregion

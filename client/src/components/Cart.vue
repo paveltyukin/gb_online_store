@@ -30,22 +30,28 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
+import CartItemByProduct from '@/components/CartItemByProduct.vue';
 
 export default defineComponent({
   name: 'Cart',
+  components: {
+    CartItemByProduct
+  }
 });
 </script>
+
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useStore } from 'vuex';
+import { ProductActionConstants } from '@/store/modules/product/constants';
 
 const store = useStore()
 const searchList = ref('');
 
-let items = store.getters['cart/cartProducts'];
+let items = store.getters['CART/CART_PRODUCTS'];
 
 const filterGoods = () => {
-  store.dispatch('products/filterGoods', searchList.value)
+  store.dispatch(ProductActionConstants.GetFilteredProducts, searchList.value)
 };
 
 </script>

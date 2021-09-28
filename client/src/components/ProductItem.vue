@@ -1,8 +1,8 @@
 <template>
   <img :src="PRODUCT_IMG" alt="Some img">
   <div class="desc">
-    <h3>{{product.name}}</h3>
-    <p>{{product.price}}₽</p>
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.price }}₽</p>
     <button class="buy-btn" @click="addProductToCart(product)">Купить</button>
   </div>
 </template>

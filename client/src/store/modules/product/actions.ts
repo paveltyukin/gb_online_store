@@ -6,6 +6,7 @@ import { ProductActionConstants, ProductMutationConstants } from '@/store/module
 import { Mutations } from '@/store/modules/product/mutations';
 import $api from '@/api';
 import { API_URL } from '@/constants';
+import { AxiosResponse } from 'axios';
 
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(
@@ -16,20 +17,28 @@ export type AugmentedActionContext = {
 
 export interface Actions {
   [ProductActionConstants.GetAllProducts](
+    { commit }: AugmentedActionContext
+  ): Promise<void>;
+  [ProductActionConstants.GetFilteredProducts](
     { commit }: AugmentedActionContext,
-    userId: number,
+    payload: string
   ): Promise<void>;
 }
 
 export const actions: ActionTree<ProductState, RootState> & Actions = {
-  async [ProductActionConstants.GetAllProducts]({ commit }: AugmentedActionContext, userId: number) {
-    const response = await $api.post(`${API_URL}/products`, userId);
-
-    const status = response.data?.status;
-    if (status === 'success') {
-      const token = response.data?.token;
-      commit(ProductMutationConstants.UpdateAllProducts, token);
-    }
+  async [ProductActionConstants.GetAllProducts]({ commit }: AugmentedActionContext) {
+    const response: AxiosResponse = await $api.post(`${API_URL}/products`);
+    commit(ProductMutationConstants.UpdateAllProducts, response.data);
+    commit(ProductMutationConstants.UpdateFilteredProducts, response.data);
+  },
+  async [ProductActionConstants.GetFilteredProducts](
+    { commit }: AugmentedActionContext,
+    payload: string
+  ) {
+    const response: AxiosResponse = await $api.post(`${API_URL}/filter_products`, {
+      filter: payload
+    });
+    commit(ProductMutationConstants.UpdateFilteredProducts, response.data);
   },
 };
 //#endregion

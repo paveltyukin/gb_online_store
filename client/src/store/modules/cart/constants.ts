@@ -8,4 +8,5 @@ export enum CartMutationConstants {
 
 export enum CartActionConstants {
   GetAllProductsInCart = 'CART/GET_ALL_PRODUCTS',
+  AddProductToCart = 'CART/ADD_PRODUCT_TO_CART',
 }

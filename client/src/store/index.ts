@@ -1,16 +1,19 @@
 import { createLogger, createStore } from "vuex";
 import { ProductStore, ProductModule } from './modules/product';
+import { CartStore, CartModule } from './modules/cart';
 import { ProductState } from '@/store/modules/product/state';
-import { CartModule } from "@/store/modules/cart";
+import { CartState } from "@/store/modules/cart/state";
 
 //#region State
 export type State = {
   product: ProductState;
+  cart: CartState;
 };
 //#endregion
 
 //#region Store
-export type Store = ProductStore<Pick<State, 'product'>>;
+export type Store = ProductStore<Pick<State, 'product'>> &
+  CartStore<Pick<State, 'cart'>>;
 
 export const store = createStore({
   plugins: [createLogger()],

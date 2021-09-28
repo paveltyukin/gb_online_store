@@ -15,21 +15,22 @@ export type AugmentedActionContext = {
 } & Omit<ActionContext<CartState, RootState>, 'commit'>;
 
 export interface Actions {
-  [CartActionConstants.GetAllProductsInCart](
+  [CartActionConstants.GetAllProductsInCart]({ commit }: AugmentedActionContext): Promise<void>;
+  [CartActionConstants.AddProductToCart](
     { commit }: AugmentedActionContext,
-    userId: number,
+    productId: number,
   ): Promise<void>;
 }
 
 export const actions: ActionTree<CartState, RootState> & Actions = {
-  async [CartActionConstants.GetAllProductsInCart]({ commit }: AugmentedActionContext, userId: number) {
-    const response = await $api.post(`${API_URL}/carts`, userId);
+  async [CartActionConstants.GetAllProductsInCart]({ commit }: AugmentedActionContext) {
+    const response = await $api.post(`${API_URL}/cart`);
 
-    const status = response.data?.status;
-    if (status === 'success') {
-      const token = response.data?.token;
-      commit(CartMutationConstants.UpdateAllCarts, token);
-    }
   },
+  async [CartActionConstants.AddProductToCart]({ commit }: AugmentedActionContext, productId: number) {
+    const response = await $api.post(`${API_URL}/add_to_cart`, productId);
+
+  },
+
 };
 //#endregion
