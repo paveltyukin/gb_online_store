@@ -9,21 +9,13 @@
         </button>
       </form>
       <button class="btn-cart" type="button">Корзина</button>
-      <div class="product-item" v-for="item of items" :key="item.id">
-        <div class="cart-item" data-id="">
-          <div class="product-bio">
-            <img :src="PRODUCT_IMG" alt="Some image">
-            <div class="product-desc">
-              <p class="product-title">{{ item.name }}</p>
-              <p class="product-quantity">Количество: {{ item.quantity }}</p>
-              <p class="product-single-price">{{ item.price }} за ед.</p>
-            </div>
-          </div>
-          <div class="right-block">
-            <p class="product-price">{{ item.quantity * item.price }} ₽</p>
-            <button class="del-btn" data-id="${this.id_product}">&times;</button>
-          </div>
-        </div>
+      <div class="product-item" v-for="item of items" :key="item.product_id">
+        <CartItemByProduct
+          :product_id="item.product_id"
+          :title="item.title"
+          :price="item.price"
+          :quantity="item.quantity"
+        />
       </div>
     </div>
   </header>
@@ -41,14 +33,21 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { useStore } from 'vuex';
 import { ProductActionConstants } from '@/store/modules/product/constants';
+import { CartActionConstants, CartGetterConstants } from '@/store/modules/cart/constants';
+import { PRODUCT_IMG } from '@/constants';
 
 const store = useStore()
 const searchList = ref('');
+let items = [];
 
-let items = store.getters['CART/CART_PRODUCTS'];
+items = computed(() => store.getters[CartGetterConstants.GetProductsInCart]);
+
+onBeforeMount(async () => {
+  items = await store.dispatch(CartActionConstants.GetAllProductsInCart);
+});
 
 const filterGoods = () => {
   store.dispatch(ProductActionConstants.GetFilteredProducts, searchList.value)

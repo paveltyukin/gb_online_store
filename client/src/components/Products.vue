@@ -3,9 +3,9 @@
     <div class="products"  v-if="products.length > 0">
       <div class="product-item" v-for="product of products" :key="product.id">
         <ProductItem
-            :id="product.id"
-            :name="product.title"
-            :price="product.price"
+          :id="product.id"
+          :title="product.title"
+          :price="product.price"
         />
       </div>
     </div>
@@ -28,14 +28,14 @@ export default defineComponent({
 <script setup lang="ts">
 import { onBeforeMount, computed, watch } from 'vue';
 import { useStore } from 'vuex'
-import { ProductGetterConstants } from '@/store/modules/product/constants';
+import { ProductActionConstants, ProductGetterConstants } from '@/store/modules/product/constants';
 
 const store = useStore()
 
 const products = computed(() => store.getters[ProductGetterConstants.GetFilteredProducts])
 
 onBeforeMount( async () => {
-  await store.dispatch('PRODUCT/GET_ALL_PRODUCTS')
+  await store.dispatch(ProductActionConstants.GetAllProducts)
 });
 
 </script>

@@ -6,6 +6,7 @@ import { CartActionConstants, CartMutationConstants } from '@/store/modules/cart
 import { Mutations } from '@/store/modules/cart/mutations';
 import $api from '@/api';
 import { API_URL } from '@/constants';
+import { ICartItem, SetQuantityProduct } from '@/types';
 
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(
@@ -15,22 +16,32 @@ export type AugmentedActionContext = {
 } & Omit<ActionContext<CartState, RootState>, 'commit'>;
 
 export interface Actions {
-  [CartActionConstants.GetAllProductsInCart]({ commit }: AugmentedActionContext): Promise<void>;
+  [CartActionConstants.SetQuantityProductsInCart](
+    { commit }: AugmentedActionContext, payload: SetQuantityProduct
+  ): Promise<void>;
   [CartActionConstants.AddProductToCart](
+    { commit }: AugmentedActionContext, productId: number,
+  ): Promise<void>;
+  [CartActionConstants.GetAllProductsInCart](
     { commit }: AugmentedActionContext,
-    productId: number,
   ): Promise<void>;
 }
 
 export const actions: ActionTree<CartState, RootState> & Actions = {
-  async [CartActionConstants.GetAllProductsInCart]({ commit }: AugmentedActionContext) {
-    const response = await $api.post(`${API_URL}/cart`);
+  async [CartActionConstants.SetQuantityProductsInCart](
+    { commit }: AugmentedActionContext, payload: SetQuantityProduct
+  ) {
+    const response = await $api.post(`${API_URL}/cart`, payload);
 
+    commit(CartMutationConstants.UpdateAllCarts, response.data);
   },
   async [CartActionConstants.AddProductToCart]({ commit }: AugmentedActionContext, productId: number) {
     const response = await $api.post(`${API_URL}/add_to_cart`, productId);
-
   },
+  async [CartActionConstants.GetAllProductsInCart]({ commit }: AugmentedActionContext) {
+    const response = await $api.post(`${API_URL}/get_cart`);
 
+    commit(CartMutationConstants.UpdateAllCarts, response.data);
+  },
 };
 //#endregion
