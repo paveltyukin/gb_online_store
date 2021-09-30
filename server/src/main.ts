@@ -3,23 +3,7 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
-// console.log(process.env.CORS_ORIGIN);
-// const whitelist = ['http://localhost:3000']
-// const corsOptions = {
-//   origin: (origin, callback) => {
-//     console.log(origin);
-//     if (whitelist.indexOf(origin) !== -1) {
-//       console.log('true');
-//       callback(null, true)
-//     }
-//     else {
-//       callback(new Error())
-//     }
-//   }
-// };
-
 const corsOptions: CorsOptions = {
-  origin: 'http://localhost:3000',
   credentials: true,
 }
 

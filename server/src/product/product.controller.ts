@@ -17,5 +17,10 @@ export class ProductController {
     return this.productService.findByProductTitle(body.filter);
   }
 
+  @Post('product')
+  async findProductById(@Body() body): Promise<Product> {
+    return this.productService.findByProductId(+body.id);
+  }
+
 
 }

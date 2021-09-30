@@ -17,4 +17,8 @@ export class ProductService {
   async findByProductTitle(title: string): Promise<Product[]> {
     return this.productModel.find({ title: new RegExp(title, 'i') }).exec();
   }
+
+  async findByProductId(id: number): Promise<Product> {
+    return this.productModel.findOne({ id }).exec();
+  }
 }
