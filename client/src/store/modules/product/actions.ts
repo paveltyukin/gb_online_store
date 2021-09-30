@@ -7,6 +7,7 @@ import { Mutations } from '@/store/modules/product/mutations';
 import $api from '@/api';
 import { API_URL } from '@/constants';
 import { AxiosResponse } from 'axios';
+import { IProduct } from '@/types';
 
 export type AugmentedActionContext = {
   commit<K extends keyof Mutations>(
@@ -23,6 +24,10 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: string
   ): Promise<void>;
+  [ProductActionConstants.GetProduct](
+    { commit }: AugmentedActionContext,
+    payload: number
+  ): Promise<IProduct>;
 }
 
 export const actions: ActionTree<ProductState, RootState> & Actions = {
@@ -39,6 +44,16 @@ export const actions: ActionTree<ProductState, RootState> & Actions = {
       filter: payload
     });
     commit(ProductMutationConstants.UpdateFilteredProducts, response.data);
+  },
+  async [ProductActionConstants.GetProduct](
+    { commit }: AugmentedActionContext,
+    payload: number
+  ): Promise<IProduct> {
+    const response: AxiosResponse = await $api.post(`${API_URL}/product`, {
+      id: payload
+    });
+
+    return response.data;
   },
 };
 //#endregion

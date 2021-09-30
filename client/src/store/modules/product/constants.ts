@@ -11,4 +11,5 @@ export enum ProductMutationConstants {
 export enum ProductActionConstants {
   GetAllProducts = 'PRODUCT/GET_ALL_PRODUCTS',
   GetFilteredProducts = 'PRODUCT/GET_FILTERED_PRODUCTS',
+  GetProduct = 'PRODUCT/GET_PRODUCT',
 }

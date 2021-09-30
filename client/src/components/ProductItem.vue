@@ -1,7 +1,11 @@
 <template>
   <img :src="PRODUCT_IMG" alt="Some img">
   <div class="desc">
-    <h3>{{ product.title }}</h3>
+    <h3>
+      <router-link :to="{ name: 'ProductPage', params: { id: product.id }}">
+        {{ product.title }}
+      </router-link>
+    </h3>
     <p>{{ product.price }}₽</p>
     <button class="buy-btn" @click="addProductToCart(product.id)">Купить</button>
   </div>
@@ -33,7 +37,7 @@ const product = reactive<IProduct>({
   price: props.price,
 });
 
-const addProductToCart = (id) => {
+const addProductToCart = (id: number) => {
   store.dispatch(CartActionConstants.SetQuantityProductsInCart, { id, quantity: 1 });
 };
 </script>

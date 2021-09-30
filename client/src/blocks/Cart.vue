@@ -1,6 +1,8 @@
 <template>
   <header>
-    <div class="logo">Интернет-магазин</div>
+    <div class="logo">
+      <router-link :to="{name: 'HomePage'}">Интернет-магазин</router-link>
+    </div>
     <div class="cart">
       <form action="#" class="search-form">
         <input type="text" class="search-field" v-model="searchList">
@@ -9,6 +11,7 @@
         </button>
       </form>
       <button class="btn-cart" type="button">Корзина</button>
+      <router-link :to="{name: 'CartPage'}">Перейти в корзину</router-link>
       <div class="product-item" v-for="item of items" :key="item.product_id">
         <CartItemByProduct
           :product_id="item.product_id"
@@ -33,20 +36,20 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { computed, onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref, ComputedRef } from 'vue';
 import { useStore } from 'vuex';
 import { ProductActionConstants } from '@/store/modules/product/constants';
 import { CartActionConstants, CartGetterConstants } from '@/store/modules/cart/constants';
 import { PRODUCT_IMG } from '@/constants';
+import { ICartItem } from '@/types';
 
 const store = useStore()
 const searchList = ref('');
-let items = [];
 
-items = computed(() => store.getters[CartGetterConstants.GetProductsInCart]);
+let items: ComputedRef<ICartItem[]> = computed((): ICartItem[] => store.getters[CartGetterConstants.GetProductsInCart]);
 
 onBeforeMount(async () => {
-  items = await store.dispatch(CartActionConstants.GetAllProductsInCart);
+  await store.dispatch(CartActionConstants.GetAllProductsInCart);
 });
 
 const filterGoods = () => {

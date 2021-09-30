@@ -23,7 +23,7 @@ export default defineComponent({
 </script>
 <script setup lang="ts">
 import { PRODUCT_IMG } from '@/constants';
-import { IProduct } from '@/types';
+import { ICartItem, IProduct } from '@/types';
 import { reactive, defineProps, defineEmits, watch } from 'vue';
 import { useStore } from 'vuex'
 import { CartActionConstants } from '@/store/modules/cart/constants';
@@ -36,7 +36,7 @@ const props = defineProps<{
   quantity: number,
 }>();
 
-const item = reactive<IProduct>({
+const item = reactive<ICartItem>({
   product_id: props.product_id,
   title: props.title,
   price: props.price,

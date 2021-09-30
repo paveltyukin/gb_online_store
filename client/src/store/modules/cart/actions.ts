@@ -38,7 +38,9 @@ export const actions: ActionTree<CartState, RootState> & Actions = {
   async [CartActionConstants.AddProductToCart]({ commit }: AugmentedActionContext, productId: number) {
     const response = await $api.post(`${API_URL}/add_to_cart`, productId);
   },
-  async [CartActionConstants.GetAllProductsInCart]({ commit }: AugmentedActionContext) {
+  async [CartActionConstants.GetAllProductsInCart](
+    { commit }: AugmentedActionContext
+  ): Promise<void> {
     const response = await $api.post(`${API_URL}/get_cart`);
 
     commit(CartMutationConstants.UpdateAllCarts, response.data);
